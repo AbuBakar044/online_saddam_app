@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "474717891533",
+    "project_id": "myfriends-5084b",
+    "storage_bucket": "myfriends-5084b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:474717891533:android:229329f5b0970a4772b284",
+        "android_client_info": {
+          "package_name": "com.example.saddam_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA47b7gc1DzBd-AxDeke28kVZ1s6T_37qw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -41,6 +41,12 @@ dependencies:
   whatsapp_unilink: ^2.1.0
   get: ^4.6.6
 
+  # Firebase Plugins
+  firebase_auth: ^4.14.1
+  cloud_firestore: ^4.13.2
+  firebase_core: ^2.23.0
+  firebase_storage: ^11.5.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

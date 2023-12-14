@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:saddam_app/views/auth/login.dart';
 import 'package:saddam_app/views/home_screen.dart';
 
 class SplashController extends GetxController {
@@ -8,7 +9,7 @@ class SplashController extends GetxController {
         const Duration(
           seconds: 5,
         ), () {
-      Get.off(() => HomeScreen());
+      Get.off(() => LoginPage());
     });
     super.onInit();
   }

@@ -1,9 +1,13 @@
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:saddam_app/controllers/add_friend_controller.dart';
 import 'package:saddam_app/models/friend_model.dart';
 
 class AddFriendsScreen extends StatefulWidget {
@@ -16,10 +20,8 @@ class AddFriendsScreen extends StatefulWidget {
 class _AddFriendsScreenState extends State<AddFriendsScreen> {
   Uint8List? userImage;
   final _formKey = GlobalKey<FormState>();
+  final addFrndCtrl = Get.put<AddFriendController>(AddFriendController());
 
-  final nameCtrl = TextEditingController();
-  final nmbrCtrl = TextEditingController();
-  final descCtrl = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +59,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                     height: 30.0,
                   ),
                   TextFormField(
-                    controller: nameCtrl,
+                    controller: addFrndCtrl.nameCtrl,
                     //added validator
 
                     validator: (value) {
@@ -74,7 +76,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                     height: 30.0,
                   ),
                   TextFormField(
-                    controller: nmbrCtrl,
+                    controller: addFrndCtrl.nmbrCtrl,
                     keyboardType: TextInputType.number,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     //added validator
@@ -95,7 +97,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                     height: 30.0,
                   ),
                   TextFormField(
-                    controller: descCtrl,
+                    controller: addFrndCtrl.descCtrl,
                     maxLines: 10,
 
                     //added validator
@@ -116,7 +118,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                     onPressed: () {
                       //checked form current state
                       if (_formKey.currentState!.validate()) {
-                        saveFriendData();
+                        addFrndCtrl.addFriends();
                         //showed snackbar
                       }
                     },
@@ -221,38 +223,37 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
     }
   }
 
-  Future<void> saveFriendData() async {
-    var friendModel = FriendModel(
-      userImage,
-      nameCtrl.text,
-      nmbrCtrl.text,
-      descCtrl.text,
-    );
+  // Future<void> saveFriendData() async {
+  //   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  //   // Map<String, dynamic> userData = {
+  //   //   'name';
+  //   // };
+  //   // FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-    
-      
+  //   // firebaseFirestore
+  //   //     .collection('users')
+  //   //     .doc(firebaseAuth.currentUser!.uid)
+  //   //     .set(data);
+  //   var friendModel = FriendModel(
+  //     userImage,
+  //     nameCtrl.text,
+  //     nmbrCtrl.text,
+  //     descCtrl.text,
+  //   );
 
-      
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Friend Saved Successfully',
-          ),
-        ),
-      );
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     const SnackBar(
+  //       content: Text(
+  //         'Friend Saved Successfully',
+  //       ),
+  //     ),
+  //   );
 
-      nameCtrl.clear();
-      nmbrCtrl.clear();
-      descCtrl.clear();
-      userImage = null;
+  //   nameCtrl.clear();
+  //   nmbrCtrl.clear();
+  //   descCtrl.clear();
+  //   userImage = null;
 
-      setState(() {});
-    
-      
-    
-    
-  }
+  //   setState(() {});
+  // }
 }
-
-
-

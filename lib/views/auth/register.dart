@@ -47,6 +47,7 @@ class RegisterPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20.0),
                 TextFormField(
+                  controller: authCtrl.nameCtrl,
                   decoration: const InputDecoration(
                     labelText: 'Name',
                     prefixIcon: Icon(Icons.person, color: Colors.white),
@@ -85,7 +86,8 @@ class RegisterPage extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     authCtrl.registerUser(
-                        authCtrl.emailCtrl.text, authCtrl.passCtrl.text);
+                      authCtrl.nameCtrl.text,
+                      authCtrl.emailCtrl.text, authCtrl.passCtrl.text, );
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 40.0),

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:saddam_app/views/add_friends_screen.dart';
@@ -14,20 +16,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
- 
   List<FriendModel> friendsList = [];
-
+  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   @override
   void initState() {
-    
-
     //getAllFriends();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber,
@@ -37,7 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
       //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -45,73 +43,79 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         },
-        
         child: Icon(Icons.add),
         backgroundColor: Colors.amber,
       ),
 
       body: Container(
-        height: MediaQuery.sizeOf(context).height,
-        child:friendsList.isEmpty
-                  ? Center(
-                      child: Text(
-                        "You don't have any friends \n press (+) button to add",
-                        textAlign: TextAlign.center,
-                      ),
-                    )
-                  : ListView.builder(
-                      itemCount: friendsList.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListTile(
-                            tileColor: Colors.amber,
-                            onLongPress: () {
-                              showDeleteDialog(index);
-                            },
-                            leading: CircleAvatar(
-                              radius: 30.0,
-                              backgroundImage: MemoryImage(
-                                friendsList[index].friendImage!,
-                              ),
-                            ),
-                            title: Row(
-                              children: [
-                                Expanded(
-                                    //flex: 2,
-                                    child: Text(
-                                  friendsList[index].name!,
-                                  textAlign: TextAlign.left,
-                                  //overflow: TextOverflow.ellipsis,
-                                )),
-                                //Spacer(),
-                                Expanded(
-                                    //flex: 1,
-                                    child: Text(
-                                  friendsList[index].mobile!,
-                                  textAlign: TextAlign.right,
-                                )),
-                              ],
-                            ),
-                            subtitle: Row(
-                              children: [
-                                Expanded(child: Text(friendsList[index].desc!)),
-                                IconButton(
-                                  onPressed: () {
-                                    showCallDialog(index);
-                                  },
-                                  icon: const Icon(
-                                    Icons.call,
-                                  ),
-                                )
-                              ],
-                            ),
+          height: MediaQuery.sizeOf(context).height,
+          child: StreamBuilder(
+              stream: firebaseFirestore
+                  .collection('users')
+                  .doc(firebaseAuth.currentUser!.uid)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  var friends = snapshot.data!['friends'] as List;
+                  friendsList =
+                      friends.map((e) => FriendModel.fromMap(e)).toList();
+                  return ListView.builder(
+                    itemCount: friendsList.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          tileColor: Colors.amber,
+                          onLongPress: () {
+                            showDeleteDialog(index);
+                          },
+                          // leading: CircleAvatar(
+                          //   radius: 30.0,
+                          //   backgroundImage: MemoryImage(
+                          //     friendsList[index].friendImage!,
+                          //   ),
+                          // ),
+                          title: Row(
+                            children: [
+                              Expanded(
+                                  //flex: 2,
+                                  child: Text(
+                                friendsList[index].name!,
+                                textAlign: TextAlign.left,
+                                //overflow: TextOverflow.ellipsis,
+                              )),
+                              //Spacer(),
+                              Expanded(
+                                  //flex: 1,
+                                  child: Text(
+                                friendsList[index].mobile!,
+                                textAlign: TextAlign.right,
+                              )),
+                            ],
                           ),
-                        );
-                      },
-                    )
-          
-      ),
+                          subtitle: Row(
+                            children: [
+                              Expanded(child: Text(friendsList[index].desc!)),
+                              IconButton(
+                                onPressed: () {
+                                  showCallDialog(index);
+                                },
+                                icon: const Icon(
+                                  Icons.call,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+              })),
     );
   }
 
